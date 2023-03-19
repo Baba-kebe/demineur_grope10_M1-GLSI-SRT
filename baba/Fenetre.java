@@ -23,8 +23,7 @@ public class Fenetre extends JFrame implements ActionListener, MouseListener{
 	      pause.addActionListener(this);
 	      reprendre = new JMenu("Reprendre");
 	      reprendre.addActionListener(this);
-	      regleDuJeu = new JMenu("?");
-	      regleDuJeu.addActionListener(this);
+	      help = new JMenu("help");
 	      
 	      //ajout du menu sur la fenetre
 	      
@@ -32,7 +31,7 @@ public class Fenetre extends JFrame implements ActionListener, MouseListener{
 		  barreMenus.add(statistiques);
 		  barreMenus.add(pause);
 		  barreMenus.add(reprendre);
-		  barreMenus.add(regleDuJeu);
+		  barreMenus.add(help);
 		  
 		  //ajout des sous menus en y incluant une actionlistener
 		  
@@ -52,23 +51,17 @@ public class Fenetre extends JFrame implements ActionListener, MouseListener{
 	      statistiques.add(e4);
 	      e4.addActionListener(this);
 	      
-	      e5 = new JMenuItem("Regle jeu");
-	      regleDuJeu.add(e5);
-	      e5.addActionListener(this);
-	      
 	}
 // les redirection lors du clic sur les sous menu
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//mettre pour reagir en fonctionne de nos different action listener
-		
 		Object source = e.getSource(); // pour savoir la source qui a declencher l'action parmi nos actionListener
 		
 		if(panelJeu != null) remove(panelJeu);
 		if(panelText != null) remove(panelText);
 		
-		if(source == e1) {//reaction aux clic sur niveau debutant
+		if(source == e1) {
 			
 			nb_partie++;
 	
@@ -99,7 +92,7 @@ public class Fenetre extends JFrame implements ActionListener, MouseListener{
 							
 					}
 				}	
-		}else if(source == e2) {//reaction aux clic sur niveau intermediaire
+		}else if(source == e2) {
 			
 			nb_partie++;
 			
@@ -128,7 +121,7 @@ public class Fenetre extends JFrame implements ActionListener, MouseListener{
 					}
 				}
 			
-		}else if(source == e3) {//reaction aux clic sur niveau expert
+		}else if(source == e3) {
 			
 			nb_partie++;
 			
@@ -156,12 +149,12 @@ public class Fenetre extends JFrame implements ActionListener, MouseListener{
 							
 					}
 				}
-		}else if(source == pause) {//cclic sur pause la methode ne fonctionne pas
+		}else if(source == pause) {
 			if(timer.isRunning()) timer.stop();
 		}else if(source == reprendre) {
 			if(!timer.isRunning()) timer.restart();
 		}
-		else if(source == e4) { //on affiche les stats
+		if(source == e4) {
 			
 			nb_partie = nb_partie_gagne + nb_partie_perdu;
 			
@@ -173,26 +166,6 @@ public class Fenetre extends JFrame implements ActionListener, MouseListener{
 			panelJeu.add(lb);
 		}
 		
-		else if(source == e4) {
-			JOptionPane.showMessageDialog(null, "Le but du jeu est de découvrir toutes les cases en évitant les mines cachées sous les boutons de\n"
-		      		+ "la grille du jeu. Un clic gauche de souris sur une case\n"
-		      		+ "permet de la révéler. Si une mine se cachait sous celle-ci,"
-		      		+ "la partie est perdue. Sinon, soit la case révèle un chiffre\n"
-		      		+ "correspondant au nombre de mines adjacentes à cette case,"
-		      		+ "soit la case est vide et dans ce cas les 8 cases adjacentes\n"
-		      		+ "sont découvertes et ainsi de suite pour toute case vide rencontrée.\n"
-		      		+ "-Un clic droit de souris sur une case permet d'y poser un\n"
-		      		+ "drapeau signifiant que l'on pense qu'une mine se cache sous la case.\n"
-		      		+ "-Un second clic droit affiche un point d'interrogation signifiant que le choix est indécis\n"
-		      		+ "-Un troisième clic droit remet la case dans son état initial (état normal ou non-marqué).\n"
-		      		+ "-Un clic gauche sur une case déjà marquée\n"
-		      		+ "d’un drapeau ou d’un point d’interrogation ne devrait avoir aucun effet.\n"
-		      		+ "La partie est considérée comme gagnée lorsque que toutes les cases cachant une mine ont été\n"
-		      		+ "marquées, ou lorsque toutes les cases non minées sont découvertes.\n"
-		      		+ "-Le niveau debutant vous permet d'avoir des cases 9x9 et 10 bombes\n"
-		      		+ "-Le niveau intermediaire vous permet d'avoir des cases 16X16 et 40 bombes\n"
-		      		+ "-Le niveau expert vous permet d'avoir des cases 16X30 et 99 bombes\n");
-		}
 		// pour reinitialiser le chrono avant de redemarrer une partie
 		chrono = 180;
 
@@ -227,8 +200,8 @@ public class Fenetre extends JFrame implements ActionListener, MouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) {
 		
-		// o recupere sur x et y la position de la cases cliquer
-		JButton bp = (JButton) e.getSource(); 
+		
+		JButton bp = (JButton) e.getSource();
 		int x = 0;
 		int y = 0;
 		
@@ -240,28 +213,18 @@ public class Fenetre extends JFrame implements ActionListener, MouseListener{
 				}
 			}
 		}
-		//le traitement pour un clic gauche
-		
 		if(e.getButton() == MouseEvent.BUTTON1) {
-			
 			//si cest le premier on decremente le nombre de cases restantes a decouvrir
-			
 			if(e.getClickCount() == 1) {
-				
-				/* a chaque premier clic sur une case on decremente nbcase et incremente 
-				pour tester si le jeueur a gagner on compare le nbcase restante au nombre de bombe 
-				*/
-				
 				nbCases--;
-				nbCases = nb_colonnes * nb_lignes;
 			}
 			bouttons[x][y].setDecouvert(true);
-			if(bouttons[x][y].getBombe() || chrono == 0) {// si on tombe sur une bombe
+			if(bouttons[x][y].getBombe() || chrono == 0) {
 				bouttons[x][y].boutton.setText("💣");
-				bouttons[x][y].boutton.setFont(new Font("Italic", Font.LAYOUT_RIGHT_TO_LEFT, 15));
+				bouttons[x][y].boutton.setFont(new Font("Italic", Font.LAYOUT_RIGHT_TO_LEFT, 25));
 				timer.stop();
 				
-				
+				// partie perdu
 				nb_partie_perdu++;
 				
 				JOptionPane.showMessageDialog(panelJeu, "vous avez perdu la partie");
@@ -280,31 +243,25 @@ public class Fenetre extends JFrame implements ActionListener, MouseListener{
 					}
 				}
 				bouttons[x][y].boutton.setText(nb+"");
-				bouttons[x][y].boutton.setFont(new Font("Italic", Font.LAYOUT_RIGHT_TO_LEFT, 15));
+				bouttons[x][y].boutton.setFont(new Font("Italic", Font.LAYOUT_RIGHT_TO_LEFT, 25));
 			}
-			
-			//le traitement pour un clic droit
-			
 		}else if(e.getButton() == MouseEvent.BUTTON3) {
 			if(e.getClickCount() == 1) {
 				if(bouttons[x][y].boutton.getText().equals("")) {
 					bouttons[x][y].boutton.setText("🚩");
-					bouttons[x][y].boutton.setFont(new Font("Italic", Font.LAYOUT_RIGHT_TO_LEFT, 15));
+					bouttons[x][y].boutton.setFont(new Font("Italic", Font.LAYOUT_RIGHT_TO_LEFT, 25));
 				}
 				else if(bouttons[x][y].boutton.getText().equals("🚩"))  {
 					bouttons[x][y].boutton.setText("?");
-					bouttons[x][y].boutton.setFont(new Font("Italic", Font.LAYOUT_RIGHT_TO_LEFT, 15));
+					bouttons[x][y].boutton.setFont(new Font("Italic", Font.LAYOUT_RIGHT_TO_LEFT, 25));
 				}
 				else if(bouttons[x][y].boutton.getText().equals("?")) {
 					bouttons[x][y].boutton.setText("");
-					bouttons[x][y].boutton.setFont(new Font("Italic", Font.LAYOUT_RIGHT_TO_LEFT, 15));
+					bouttons[x][y].boutton.setFont(new Font("Italic", Font.LAYOUT_RIGHT_TO_LEFT, 25));
 				}
 			}
 		}
-		/*
-		on teste si le joueur a gagner il gagnes si les cases restantes ne contiennent
-		que des bombes
-		*/
+		
 		if(nbCases == nb_bombe_cacher) {
 			JOptionPane.showMessageDialog(panelJeu, "Felicitations, Vous avez gegner la partie");
 			remove(panelJeu);
@@ -333,11 +290,12 @@ public class Fenetre extends JFrame implements ActionListener, MouseListener{
 	
 	Container contenu;
 	JMenuBar barreMenus;
-	JMenu regleDuJeu, nvllepartie, statistiques, pause, reprendre ;
+	JMenu help, nvllepartie, statistiques, pause, reprendre ;
 	JMenuItem e1, e2, e3, e4, e5, e6, e7;
 	JPanel panelJeu, panelText;
 	Boutton[][] bouttons;
 	int nb_lignes , nb_colonnes, nombreBombe; //ligne et colone du jeu variant en fonction du niveau
+	
 	JLabel lb, ch;
 	int nb_bombe_cacher;
 	int nbCases = nb_colonnes * nb_lignes;
