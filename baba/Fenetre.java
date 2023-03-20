@@ -165,7 +165,7 @@ public class Fenetre extends JFrame implements ActionListener, MouseListener{
 					" Nombre de partie gagner: "+ nb_partie_gagne);
 			panelJeu.add(lb);
 		}
-		
+		nbCases = nb_lignes * nb_colonnes;
 		// pour reinitialiser le chrono avant de redemarrer une partie
 		chrono = 180;
 
@@ -298,7 +298,7 @@ public class Fenetre extends JFrame implements ActionListener, MouseListener{
 	
 	JLabel lb, ch;
 	int nb_bombe_cacher;
-	int nbCases = nb_colonnes * nb_lignes;
+	int nbCases;
 	int chrono = 120;
 	
 	int nb_partie_gagne, nb_partie_perdu, nb_partie;
